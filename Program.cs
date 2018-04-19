@@ -1,5 +1,4 @@
-﻿using Lab1;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -12,52 +11,108 @@ namespace Lab2
     {
         static void Main(string[] args)
         {
-            int numberOfElements = 16000;
+            int numberOfElements = 2048000;
             List<int> data = new List<int>();
             GenerateData(data, numberOfElements);
 
-            Menu(data);
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
+            /* Sorting methods */
+            //ShellSort(data, 3);
+            //ShellSort(data, 2);
+            //QuickSort1(data, 0, data.Count - 1);        // first element
+            //QuickSort2(data, 0, data.Count - 1);        // random
+            QuickSort3(data, 0, data.Count - 1);          // median of three
+
+            stopWatch.Stop();
+            Console.WriteLine("time: " + stopWatch.ElapsedMilliseconds + " [ms]");
+
+            PrintResultMessage(data);
         }
 
-        private static void Menu(List<int> data)
+        private static void QuickSort1(List<int> data, int left, int right)
         {
-            while(true)
+            int i = left;
+            int j = right;
+            int pivot = data[left];
+            while (i < j)
             {
-                List<int> tempData = data;
-
-                PrintMenuMessage();
-                string input = Console.ReadLine();
-                Int32.TryParse(input, out int option);
-                Stopwatch stopWatch = new Stopwatch();
-                stopWatch.Start();
-                switch (option)
+                while (data[i] < pivot) i++;
+                while (data[j] > pivot) j--;
+                if (i <= j)
                 {
-                    case 1:
-                        SelectionSort.Exec(tempData);
-                        break;
-                    case 2:
-                        InsertionSort.Exec(tempData);
-                        break;
-                    case 3:
-                        InsertionSort.ExecWithGuard(tempData);
-                        break;
-                    case 4:
-                        BubbleSort.Exec(tempData);
-                        break;
-                    case 5:
-                        BubbleSort.ExecCocktail(tempData);
-                        break;
-                    case 0:
-                        return;
+                    Swap(data, i, j);
+                    i++;
+                    j--;
                 }
-                stopWatch.Stop();
-                Console.WriteLine("time: " + stopWatch.ElapsedMilliseconds + " [ms]");
-                PrintResultMessage(tempData);
             }
-            
+            if (left < j)
+            {
+                QuickSort1(data, left, j);
+            }
+            if (i < right)
+            {
+                QuickSort1(data, i, right);
+            }
+        }
+        private static void QuickSort2(List<int> data, int left, int right)
+        {
+            Random random = new Random();
+            int i = left;
+            int j = right;
+            int pivot = data[random.Next(left, right + 1)];
+            while (i < j)
+            {
+                while (data[i] < pivot) i++;
+                while (data[j] > pivot) j--;
+                if (i <= j)
+                {
+                    Swap(data, i, j);
+                    i++;
+                    j--;
+                }
+            }
+            if (left < j)
+            {
+                QuickSort2(data, left, j);
+            }
+            if (i < right)
+            {
+                QuickSort2(data, i, right);
+            }
+        }
+        private static void QuickSort3(List<int> data, int v1, int v2)
+        {
+            throw new NotImplementedException();
         }
 
-        #region private
+
+        private static void ShellSort(List<int> data, int k)
+        {
+            int h = 1;
+            int n = data.Count;
+
+            while (h < n / Math.Pow(k, 2.0))
+            {
+                h = k * h + 1;
+            }
+            while (h > 0)
+            {
+                for(int i = h; i < n; i++)
+                {
+                    int x = data[i];
+                    int j = i;
+                    while (j >= h && x < data[j-h])
+                    {
+                        data[j] = data[j - h];
+                        j -= h;
+                    }
+                    data[j] = x;
+                }
+                h = h / k;
+            }
+        }
 
         static void GenerateData(List<int> data, int numberOfElements)
         {
@@ -68,17 +123,27 @@ namespace Lab2
             }
         }
 
-        private static void PrintMenuMessage()
-        {
-            Console.WriteLine("\nChoose sorting method: ");
-            Console.WriteLine("\t1. Selection Sort\n" +
-                "\t2. Insertion Sort\n" +
-                "\t3. Insertion Sort with Guard - not working\n" +
-                "\t4. Bubble Sort\n" +
-                "\t5. Cocktail Sort\n" +
-                "\t0. Exit");
-        }
 
+        #region private
+        private static void Swap(List<int> list, int indexA, int indexB)
+        {
+            int tmp = list[indexA];
+            list[indexA] = list[indexB];
+            list[indexB] = tmp;
+        }
+        private static bool IsSorted(List<int> data)
+        {
+            for (int i = 1; i < data.Count; i++)
+            {
+                if (data[i - 1] > data[i])
+                {
+                    Console.WriteLine("fault indexes: " + (i - 1) + " " + i);
+                    return false;
+                }
+            }
+
+            return true;
+        }
         private static void PrintResultMessage(List<int> data)
         {
             if (IsSorted(data))
