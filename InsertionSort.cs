@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Lab1
 {
@@ -29,13 +25,14 @@ namespace Lab1
             {
                 int x = data[i];
                 data.Insert(0, x);
-                int j = i - 1;
+                int j = i;
                 while (x < data[j])
                 {
                     data[j + 1] = data[j];
                     j--;
                 }
                 data[j + 1] = x;
+                data.Remove(x);
             }
         }
     }

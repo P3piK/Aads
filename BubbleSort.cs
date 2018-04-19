@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Lab1
 {
@@ -52,6 +48,32 @@ namespace Lab1
 
             } while (swapped);
 
+        }
+
+        public static void ExecOddEven(List<int> data)
+        {
+            var sorted = false;
+            while (!sorted)
+            {
+                sorted = true;
+                for (var i = 1; i < data.Count - 1; i += 2)
+                {
+                    if (data[i] > data[i + 1])
+                    {
+                        Swap(data, i, i + 1);
+                        sorted = false;
+                    }
+                }
+
+                for (var i = 0; i < data.Count - 1; i += 2)
+                {
+                    if (data[i] > data[i + 1])
+                    {
+                        Swap(data, i, i + 1);
+                        sorted = false;
+                    }
+                }
+            }
         }
 
         private static void Swap(IList<int> list, int indexA, int indexB)

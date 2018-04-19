@@ -1,29 +1,24 @@
-﻿using Lab1;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Lab2aads
+namespace Lab1
 {
     class Program
     {
         static void Main(string[] args)
         {
-            int numberOfElements = 16000;
             List<int> data = new List<int>();
-            GenerateData(data, numberOfElements);
 
             Menu(data);
         }
 
         private static void Menu(List<int> data)
         {
+            NewData(out data);
             while(true)
             {
-                List<int> tempData = data;
+                List<int> tempData = new List<int>(data);
 
                 PrintMenuMessage();
                 string input = Console.ReadLine();
@@ -47,6 +42,12 @@ namespace Lab2aads
                     case 5:
                         BubbleSort.ExecCocktail(tempData);
                         break;
+                    case 6:
+                        BubbleSort.ExecOddEven(tempData);
+                        break;
+                    case 9:
+                        NewData(out data);
+                        break;
                     case 0:
                         return;
                 }
@@ -55,6 +56,15 @@ namespace Lab2aads
                 PrintResultMessage(tempData);
             }
             
+        }
+
+        private static void NewData(out List<int> data)
+        {
+            Console.Write("Enter size of data sample: ");
+            string input = Console.ReadLine();
+            Int32.TryParse(input, out int numberOfElements);
+            data = new List<int>();
+            GenerateData(data, numberOfElements);
         }
 
         #region private
@@ -86,9 +96,11 @@ namespace Lab2aads
             Console.WriteLine("\nChoose sorting method: ");
             Console.WriteLine("\t1. Selection Sort\n" +
                 "\t2. Insertion Sort\n" +
-                "\t3. Insertion Sort with Guard - not working\n" +
+                "\t3. Insertion Sort with Guard\n" +
                 "\t4. Bubble Sort\n" +
                 "\t5. Cocktail Sort\n" +
+                "\t6. Odd-even Sort\n" +
+                "\t9. New data set\n" +
                 "\t0. Exit");
         }
 
