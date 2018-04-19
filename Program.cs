@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lab1;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,126 +12,60 @@ namespace Lab2aads
     {
         static void Main(string[] args)
         {
-            int numberOfElements = 64000;
+            int numberOfElements = 16000;
             List<int> data = new List<int>();
             GenerateData(data, numberOfElements);
 
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-
-            /* Sorting methods */
-
-            SelectionSort(data);
-            //InsertionSort(data);
-            //InsertionSortWithGuard(data);
-            //BubbleSort(data);
-            //CocktailSort(data);
-
-            stopWatch.Stop();
-            Console.WriteLine("time: " + stopWatch.ElapsedMilliseconds + " [ms]");
-
-            PrintResultMessage(data);
+            Menu(data);
         }
 
-        static void GenerateData(List<int> data, int numberOfElements)
+        private static void Menu(List<int> data)
+        {
+            while(true)
+            {
+                List<int> tempData = data;
+
+                PrintMenuMessage();
+                string input = Console.ReadLine();
+                Int32.TryParse(input, out int option);
+                Stopwatch stopWatch = new Stopwatch();
+                stopWatch.Start();
+                switch (option)
+                {
+                    case 1:
+                        SelectionSort.Exec(tempData);
+                        break;
+                    case 2:
+                        InsertionSort.Exec(tempData);
+                        break;
+                    case 3:
+                        InsertionSort.ExecWithGuard(tempData);
+                        break;
+                    case 4:
+                        BubbleSort.Exec(tempData);
+                        break;
+                    case 5:
+                        BubbleSort.ExecCocktail(tempData);
+                        break;
+                    case 0:
+                        return;
+                }
+                stopWatch.Stop();
+                Console.WriteLine("time: " + stopWatch.ElapsedMilliseconds + " [ms]");
+                PrintResultMessage(tempData);
+            }
+            
+        }
+
+        #region private
+
+        private static void GenerateData(List<int> data, int numberOfElements)
         {
             Random rnd = new Random();
             while (data.Count < numberOfElements)
             {
                 data.Add(rnd.Next());
             }
-        }
-
-        static void SelectionSort(List<int> data)
-        {
-            int n = data.Count;
-            for (int i = 0; i < n; i++)
-            {
-                int k = i;
-                int minValue = data[i];
-
-                FindMinElement(data, n, i, ref k, ref minValue);
-
-                data[k] = data[i];
-                data[i] = minValue;
-            }
-        }
-
-        static void InsertionSort(List<int> data)
-        {
-            for (int i = 1; i < data.Count; i++)
-            {
-                int x = data[i];
-                int j = i - 1;
-                while (j >= 0 && x < data[j])
-                {
-                    data[j + 1] = data[j];
-                    j--;
-                }
-                data[j + 1] = x;
-            }
-        }
-
-        static void InsertionSortWithGuard(List<int> data)
-        { 
-            for (int i = 1; i < data.Count; i++)
-            {
-                int x = data[i];
-                int guard = x;
-                int j = i - 1;
-                while (j > 0 && x < data[j])
-                {
-                    data[j + 1] = data[j];
-                    j--;
-                }
-                data[j + 1] = x;
-            }
-        }
-
-        static void BubbleSort(List<int> data)
-        {
-            for(int i = 0; i < data.Count; i++)
-            {
-                for(int j = 1; j < data.Count; j++)
-                {
-                    if(data[j-1] > data[j])
-                    {
-                        Swap(data, j - 1, j);
-                    }
-                }
-            }
-        }
-        
-        static void CocktailSort(List<int> data)
-        {
-            bool swapped;
-            do
-            {
-                swapped = false;
-                for(int i = 0; i <= data.Count - 2; i++)
-                {
-                    if(data[i] > data[i+1])
-                    {
-                        Swap(data, i, i + 1);
-                        swapped = true;
-                    }
-                }
-                if(!swapped)
-                {
-                    break;
-                }
-                swapped = false;
-                for(int i = data.Count - 2; i >=0; i--)
-                {
-                    if(data[i] > data[i+1])
-                    {
-                        Swap(data, i, i + 1);
-                        swapped = true;
-                    }
-                }
-
-            } while (swapped);
-
         }
 
         static bool IsSorted(List<int> data)
@@ -146,24 +81,17 @@ namespace Lab2aads
             return true;
         }
 
-        #region private
-        private static void Swap(IList<int> list, int indexA, int indexB)
+        private static void PrintMenuMessage()
         {
-            int tmp = list[indexA];
-            list[indexA] = list[indexB];
-            list[indexB] = tmp;
+            Console.WriteLine("\nChoose sorting method: ");
+            Console.WriteLine("\t1. Selection Sort\n" +
+                "\t2. Insertion Sort\n" +
+                "\t3. Insertion Sort with Guard - not working\n" +
+                "\t4. Bubble Sort\n" +
+                "\t5. Cocktail Sort\n" +
+                "\t0. Exit");
         }
-        private static void FindMinElement(List<int> data, int n, int i, ref int k, ref int minValue)
-        {
-            for (int j = i + 1; j < n; j++)
-            {
-                if (data[j] < minValue)
-                {
-                    k = j;
-                    minValue = data[j];
-                }
-            }
-        }
+
         private static void PrintResultMessage(List<int> data)
         {
             if (IsSorted(data))
@@ -175,20 +103,6 @@ namespace Lab2aads
                 Console.WriteLine("Oops.. I'm affraid it's not sorted, sir.");
             }
         }
-        //private static void GetTimeDifference(Stopwatch stopWatch)
-        //{
-        //    int timeSecond, timeMillisecond;
-        //    timeSecond = DateTime.Now.Second - beginTimeSecond;
-        //    timeMillisecond = DateTime.Now.Millisecond - beginTimeMillisecond;
-
-        //    if (timeMillisecond < 0)
-        //    {
-        //        timeSecond--;
-        //        timeMillisecond = 1 + timeMillisecond;
-        //    }
-
-        //    Console.WriteLine("Time: " + timeSecond.ToString() + ":" + timeMillisecond.ToString());
-        //}
         #endregion
 
     }
