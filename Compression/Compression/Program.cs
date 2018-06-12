@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace Compression
 {
@@ -19,33 +18,9 @@ namespace Compression
                 compressionDao.Buffer = CompressionController.SetBuffer(bufferOffset);
 
                 CompressionController.EncodeWord(compressionDao, ref bufferOffset);
-                PrintStage(compressionDao);
+                View.PrintStage(compressionDao);
             }
             
         }
-
-        #region View
-
-        private static void PrintStage(CompressionDao compressionDao)
-        {
-            Console.WriteLine(compressionDao.CompressionDictionary + "\t" + compressionDao.Buffer + "\t" + PrintTranslator(compressionDao));
-        }
-
-        private static string PrintTranslator(CompressionDao compressionDao)
-        {
-            if (compressionDao.compressions.LastOrDefault().Status == 0)
-            {
-                return String.Format("{0}, {1}, {2}",
-                    compressionDao.compressions.LastOrDefault().Status,
-                    compressionDao.compressions.LastOrDefault().Offset,
-                    compressionDao.compressions.LastOrDefault().Length);
-            }
-
-            return String.Format("{0}, {1}",
-                compressionDao.compressions.LastOrDefault().Status,
-                compressionDao.compressions.LastOrDefault().NewChar);
-        }
-
-        #endregion
     }
 }
