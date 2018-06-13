@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Compression
 {
-    public class CompressionTranslator
+    public class CompressionTranslatorDto
     {
         public int Status { get; set; }
         public char NewChar { get; set; }

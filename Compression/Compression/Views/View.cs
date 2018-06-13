@@ -7,12 +7,12 @@ namespace Compression
     {
         #region View
 
-        public static void PrintStage(CompressionDao compressionDao)
+        public static void PrintStage(CompressionDto compressionDao)
         {
             Console.WriteLine(compressionDao.CompressionDictionary + "\t" + compressionDao.Buffer + "\t" + PrintTranslator(compressionDao));
         }
 
-        public static string PrintTranslator(CompressionDao compressionDao)
+        public static string PrintTranslator(CompressionDto compressionDao)
         {
             if (compressionDao.compressions.LastOrDefault().Status == 0)
             {
