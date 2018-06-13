@@ -6,15 +6,15 @@ namespace Compression
 {
     public class CompressionDto
     {
-        public string CompressionDictionary { get; set; }
+        public string CompressedDictionary { get; set; }
         public string Buffer { get; set; }
 
-        public List<CompressionTranslatorDto> compressions;
+        public List<CommonTranslatorDto> compressionSteps;
 
         public CompressionDto()
         {
-            CompressionDictionary = new string(Program.WORD_TO_COMPRESS.ToLower()[0], Program.DICTIONARY_LENGTH);
-            compressions = new List<CompressionTranslatorDto>();
+            CompressedDictionary = new string(Program.WORD_TO_COMPRESS.ToLower()[0], Program.DICTIONARY_LENGTH);
+            compressionSteps = new List<CommonTranslatorDto>();
         }
     }
 }

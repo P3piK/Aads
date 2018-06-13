@@ -14,13 +14,13 @@ namespace Compression
             var compressionDto = new CompressionDto();
             int bufferOffset = 0;
 
-            while(!CompressionController.IsEncoded(compressionDto, bufferOffset))
-            {
-                compressionDto.Buffer = CompressionController.SetBuffer(bufferOffset);
+            View.PrintStartCompressionMessage();
+            CompressionController.PerformCompression(compressionDto, bufferOffset);
 
-                CompressionController.EncodeWord(compressionDto, ref bufferOffset);
-                View.PrintStage(compressionDto);
-            }
+            View.PrintStartDecompressionMessage();
+
+            // add decompression, 
+            // add read /save from file
             
         }
     }
