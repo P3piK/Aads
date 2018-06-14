@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Compression.Dto;
 
 namespace Compression
 {
@@ -27,14 +28,19 @@ namespace Compression
                 compressionDao.compressionSteps.LastOrDefault().NewChar);
         }
 
+        internal static void PrintDecompressionStage(DecompressionDto decompressionDto)
+        {
+            Console.WriteLine(decompressionDto.DecompressedWord);
+        }
+
         public static void PrintStartDecompressionMessage()
         {
-            Console.WriteLine("Started decompression...");
+            Console.WriteLine("\nStarted decompression...");
         }
 
         public static void PrintStartCompressionMessage()
         {
-            Console.WriteLine("Started compression...");
+            Console.WriteLine("\nStarted compression...");
         }
 
         #endregion

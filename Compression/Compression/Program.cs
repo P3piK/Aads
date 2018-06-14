@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Compression.Controllers;
+using Compression.Dto;
+using System;
 
 namespace Compression
 {
@@ -12,12 +14,14 @@ namespace Compression
         static void Main(string[] args)
         {
             var compressionDto = new CompressionDto();
+            var decompressionDto = new DecompressionDto();
             int bufferOffset = 0;
 
             View.PrintStartCompressionMessage();
             CompressionController.PerformCompression(compressionDto, bufferOffset);
 
             View.PrintStartDecompressionMessage();
+            DecompressionController.PerformDecompression(compressionDto);
 
             // add decompression, 
             // add read /save from file

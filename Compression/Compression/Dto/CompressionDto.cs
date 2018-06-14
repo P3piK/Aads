@@ -8,12 +8,14 @@ namespace Compression
     {
         public string CompressedDictionary { get; set; }
         public string Buffer { get; set; }
+        public char FirstLetter { get; private set; }
 
         public List<CommonTranslatorDto> compressionSteps;
 
         public CompressionDto()
         {
-            CompressedDictionary = new string(Program.WORD_TO_COMPRESS.ToLower()[0], Program.DICTIONARY_LENGTH);
+            FirstLetter = Program.WORD_TO_COMPRESS.ToLower()[0];
+            CompressedDictionary = new string(FirstLetter, Program.DICTIONARY_LENGTH);
             compressionSteps = new List<CommonTranslatorDto>();
         }
     }
