@@ -4,14 +4,14 @@ using System.Text;
 
 namespace Hashing.Controllers
 {
-    public class LinearProbingController
+    public class DoubleHashingController
     {
         public static int searchCount;
         public static bool Insert(HashtableDto[] hashtable, HashtableDto data)
         {
-            for(int i = 0; i < hashtable.Length; i++)
+            for (int i = 0; i < hashtable.Length; i++)
             {
-                int key = HashingFunction(data, i);
+                int key = HashingJoint(data, i);
 
                 if (hashtable[key] == null)
                 {
@@ -27,14 +27,14 @@ namespace Hashing.Controllers
         {
             for (int i = 0; i < hashtable.Length; i++)
             {
-                int key = HashingFunction(data, i);
+                int key = HashingJoint(data, i);
                 searchCount++;
 
-                if(hashtable[key] == data)
+                if (hashtable[key] == data)
                 {
                     return true;
                 }
-                else if(hashtable[key] == null)
+                else if (hashtable[key] == null)
                 {
                     return false;
                 }
@@ -43,9 +43,20 @@ namespace Hashing.Controllers
             return false;
         }
 
-        private static int HashingFunction(HashtableDto data, int i)
+
+        private static int HashingJoint(HashtableDto data, int i)
         {
-            return (data.Key + i) % Program.TABLE_SIZE;
+            return (Hashing1(data) + i * Hashing2(data)) % Program.TABLE_SIZE;
+        }
+
+        private static int Hashing1(HashtableDto data)
+        {
+            return data.Key % Program.TABLE_SIZE;
+        }
+
+        private static int Hashing2(HashtableDto data)
+        {
+            return Program.TABLE_SIZE / 2 - (data.Key % (Program.TABLE_SIZE / 2));
         }
     }
 }
