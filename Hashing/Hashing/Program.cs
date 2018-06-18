@@ -1,4 +1,5 @@
 ﻿using Hashing.Controllers;
+using Hashing.Helpers;
 using Hashing.Views;
 using System;
 using System.Collections.Generic;
@@ -10,38 +11,43 @@ namespace Hashing
     class Program
     {
         public static int TABLE_SIZE = 0;
+        public static int LARGEST_PRIME = 0;
 
         private const string DATA_FILE_PATH = "data.txt";
         private const string DATA_MISS_FILE_PATH = "data_miss.txt";
-        private const double FILL_PERCENTAGE = 0.5;
+        private const double FILL_PERCENTAGE = 0.9;
 
         static void Main(string[] args)
         {
             string filePath = DATA_FILE_PATH;
+            string searchFilePath = DATA_FILE_PATH;
 
             TABLE_SIZE = SetTableSize(filePath);
+            LARGEST_PRIME = PrimeNumberFinder.FindLargestPrime(TABLE_SIZE);
+
+
             if (!(TABLE_SIZE > default(int)))
             {
                 return;
             }
 
-            List<int> fileData = FillListWithData(filePath);
+            List<int> insertFileData = FillListWithData(filePath);
+            List<int> searchFileData = FillListWithData(searchFilePath);
             HashtableDto[] hashtableLinear = new HashtableDto[TABLE_SIZE];
             FillHashtableWithNulls(TABLE_SIZE, hashtableLinear);
             HashtableDto[] hashtableDouble = new HashtableDto[TABLE_SIZE];
             Array.Copy(hashtableLinear, hashtableDouble, TABLE_SIZE);
 
-            InsertValuesLinearProbing(fileData, hashtableLinear, FILL_PERCENTAGE);
-            InsertValuesDoubleHashing(fileData, hashtableDouble, FILL_PERCENTAGE);
+            InsertValuesLinearProbing(insertFileData, hashtableLinear, FILL_PERCENTAGE);
+            InsertValuesDoubleHashing(insertFileData, hashtableDouble, FILL_PERCENTAGE);
 
-            foreach(var value in fileData)
+            foreach(var value in searchFileData)
             {
                 LinearProbingController.Search(hashtableLinear, new HashtableDto(value, value));
                 DoubleHashingController.Search(hashtableDouble, new HashtableDto(value, value));
             }
 
-            View.PrintLinearSearchCount();
-            View.PrintDoubleSearchCount();
+            View.PrintAllResults();
 
         }
 

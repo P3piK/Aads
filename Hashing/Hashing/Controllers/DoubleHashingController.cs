@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hashing.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,12 +7,16 @@ namespace Hashing.Controllers
 {
     public class DoubleHashingController
     {
+        public static int insertCount;
         public static int searchCount;
+        public static int searchMissCount;
+
         public static bool Insert(HashtableDto[] hashtable, HashtableDto data)
         {
-            for (int i = 0; i < hashtable.Length; i++)
+            for (int i = 0; i < Program.TABLE_SIZE; i++)
             {
                 int key = HashingJoint(data, i);
+                insertCount++;
 
                 if (hashtable[key] == null)
                 {
@@ -25,7 +30,7 @@ namespace Hashing.Controllers
 
         public static bool Search(HashtableDto[] hashtable, HashtableDto data)
         {
-            for (int i = 0; i < hashtable.Length; i++)
+            for (int i = 0; i < Program.TABLE_SIZE; i++)
             {
                 int key = HashingJoint(data, i);
                 searchCount++;
@@ -38,11 +43,12 @@ namespace Hashing.Controllers
                 {
                     return false;
                 }
+
+                searchMissCount++;
             }
 
             return false;
         }
-
 
         private static int HashingJoint(HashtableDto data, int i)
         {
@@ -56,7 +62,7 @@ namespace Hashing.Controllers
 
         private static int Hashing2(HashtableDto data)
         {
-            return Program.TABLE_SIZE / 2 - (data.Key % (Program.TABLE_SIZE / 2));
+            return Program.LARGEST_PRIME - (data.Key % Program.LARGEST_PRIME);
         }
     }
 }

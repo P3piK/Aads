@@ -6,12 +6,16 @@ namespace Hashing.Controllers
 {
     public class LinearProbingController
     {
+        public static int insertCount;
         public static int searchCount;
+        public static int searchMissCount;
+
         public static bool Insert(HashtableDto[] hashtable, HashtableDto data)
         {
             for(int i = 0; i < hashtable.Length; i++)
             {
                 int key = HashingFunction(data, i);
+                insertCount++;
 
                 if (hashtable[key] == null)
                 {
@@ -38,6 +42,8 @@ namespace Hashing.Controllers
                 {
                     return false;
                 }
+
+                searchMissCount++;
             }
 
             return false;
