@@ -36,26 +36,26 @@ namespace Hashing.Views
 
         private static void PrintLinearSearchCount()
         {
-            Console.WriteLine("Linear probing search count:");
-            Console.WriteLine(LinearProbingController.searchCount);
+            Console.WriteLine("Linear probing avarage search count:");
+            Console.WriteLine((double)LinearProbingController.searchCount / Program.TABLE_SIZE);
         }
 
         private static void PrintLinearSearchMissCount()
         {
-            Console.WriteLine("Linear probing search miss count:");
-            Console.WriteLine(LinearProbingController.searchMissCount);
+            Console.WriteLine("Linear probing avarage search miss count:");
+            Console.WriteLine((double)LinearProbingController.searchMissCount / Program.TABLE_SIZE);
         }
 
         private static void PrintDoubleSearchCount()
         {
-            Console.WriteLine("Double hashing search count:");
-            Console.WriteLine(DoubleHashingController.searchCount);
+            Console.WriteLine("Double hashing avarage search count:");
+            Console.WriteLine((double)DoubleHashingController.searchCount / Program.TABLE_SIZE);
         }
         
         private static void PrintDoubleSearchMissCount()
         {
-            Console.WriteLine("Double hashing search miss count:");
-            Console.WriteLine(DoubleHashingController.searchMissCount);
+            Console.WriteLine("Double hashing avarage search miss count:");
+            Console.WriteLine((double)DoubleHashingController.searchMissCount / Program.TABLE_SIZE);
         }
     }
 }
