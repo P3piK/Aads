@@ -1,4 +1,5 @@
 ﻿using GraphAlgorithms.Helpers;
+using GraphAlgorithms.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,62 +8,74 @@ namespace GraphAlgorithms.Controllers
 {
     public class FloydController
     {
-        public int NodesCount { get; set; }
-        public int[][] Table { get; set; }
-        public string FileName { get; set; }
+        public FloydModel Model { get; set; }
+        public FloydView View { get; set; }
 
-        public FloydController(string fileName)
+        public FloydController(FloydModel model)
         {
-            FileName = fileName;
+            Model = model;
+            View = new FloydView(Model);
         }
 
         public void PerformFloyd()
         {
-            FileReader reader = new FileReader(FileName);
-            NodesCount = reader.GetNodesCount();
-            SetTable();
-            reader.FillTable(Table);
-            FloydView.PrintTable(Table);
+            View.PrintTable();
 
             RunFloydAlgorithm();
-
-            FloydView.PrintResultMessage();
-            FloydView.PrintTable(Table);
+            FindPaths();
+            
+            View.PrintResultMessage();
+            View.PrintTable();
+            View.PrintPaths();
         }
 
         private void RunFloydAlgorithm()
         {
-            for(int k = 0; k < NodesCount; k++)
+            for(int k = 0; k < Model.NodesCount; k++)
             {
-                for(int i = 0; i < NodesCount; i++)
+                for(int i = 0; i < Model.NodesCount; i++)
                 {
-                    for(int j = 0; j < NodesCount; j++)
+                    for(int j = 0; j < Model.NodesCount; j++)
                     {
-                        Table[i][j] = Math.Min(Table[i][j], Table[i][k] + Table[k][j]);
+                        int tempDist = Model.Table[i][k] + Model.Table[k][j];
+                        if (Model.Table[i][j] > tempDist)
+                        {
+                            Model.Table[i][j] = tempDist;
+                            Model.IntermediateVertexTable[i][j] = k;
+                        }
                     }
                 }
 
-                FloydView.PrintTableIndex(k + 1);
-                FloydView.PrintTable(Table);
+                View.PrintTableIndex(k + 1);
+                View.PrintTable();
             }
         }
 
-        private void SetTable()
+        private void FindPaths()
         {
-            Table = new int[NodesCount][];
-            for (int i = 0; i < NodesCount; i++)
+            for(int i = 0; i < Model.NodesCount; i++)
             {
-                Table[i] = new int[NodesCount];
-                for(int j = 0; j < Table[i].Length; j++)
+                for(int j = 0; j < Model.NodesCount; j++)
                 {
                     if(i == j)
                     {
-                        Table[i][j] = 0;
+                        continue;
                     }
-                    else
+
+                    var path = new Path
                     {
-                        Table[i][j] = 99999;
+                        FirstNode = i + 1,
+                        LastNode = j + 1
+                    };
+
+                    int row = i;
+                    while(Model.IntermediateVertexTable[row][j] != FloydModel.INF)
+                    {
+                        row = Model.IntermediateVertexTable[row][j];
+                        path.IntermediateNodes.Add(row + 1);
                     }
+
+                    Model.Paths.Add(path);
                 }
             }
         }

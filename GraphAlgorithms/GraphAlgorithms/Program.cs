@@ -1,5 +1,6 @@
 ﻿using GraphAlgorithms.Controllers;
 using GraphAlgorithms.Helpers;
+using GraphAlgorithms.Models;
 using System;
 
 namespace GraphAlgorithms
@@ -10,7 +11,8 @@ namespace GraphAlgorithms
 
         static void Main(string[] args)
         {
-            FloydController floydController = new FloydController(FLOYD_FILE);
+            FloydModel floydModel = new FloydModel(FLOYD_FILE);
+            FloydController floydController = new FloydController(floydModel);
             floydController.PerformFloyd();
 
         }
